@@ -401,7 +401,7 @@
 
         <!-- Order Section -->
         <div id="order" class="section">
-            <form class="order-form" id="orderForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data">
+            <form class="order-form" id="orderForm">
                 <h2>Commission Your Creation</h2>
                 
                 <div class="form-group">
@@ -432,17 +432,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="reference">Reference Image (Optional)</label>
-                    <div class="file-upload">
-                        <input type="file" id="reference" name="reference" accept="image/*">
-                        <label for="reference" class="file-upload-label">
-                            📎 Upload Inspiration Image
-                        </label>
-                    </div>
-                    <div class="file-name" id="fileName"></div>
-                </div>
-
-                <div class="form-group">
                     <label for="dueDate">Required Date *</label>
                     <input type="date" id="dueDate" name="dueDate" required>
                 </div>
@@ -467,24 +456,35 @@
             document.getElementById(sectionId).classList.add('active');
         }
 
-        // File upload display
-        document.getElementById('reference').addEventListener('change', function(e) {
-            const fileName = e.target.files[0]?.name || '';
-            const fileDisplay = document.getElementById('fileName');
-            if (fileName) {
-                fileDisplay.textContent = `Selected: ${fileName}`;
-            } else {
-                fileDisplay.textContent = '';
-            }
-        });
-
         // Handle form submission
         document.getElementById('orderForm').addEventListener('submit', function(e) {
-            // Form will submit normally to FormSpree
-            // Show success message after a brief delay
-            setTimeout(function() {
-                document.getElementById('successMsg').style.display = 'block';
-            }, 100);
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('type', document.getElementById('type').value);
+            formData.append('design', document.getElementById('design').value);
+            formData.append('dueDate', document.getElementById('dueDate').value);
+            
+            // Send to Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbzTI0biWj8C3Iye4MeoZsx0TPrHbwpGCl0qM4XJcQFvWMDTC7yK3wekQOBC80acuext/exec', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('successMsg').style.display = 'block';
+                    document.getElementById('orderForm').reset();
+                } else {
+                    alert('There was an error submitting your order. Please try again or email us directly.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your order. Please try again or email us directly.');
+            });
         });
     </script>
 </body>
