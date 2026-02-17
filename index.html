@@ -21,34 +21,31 @@
 
         header {
             background: linear-gradient(135deg, #ffffff 0%, #faf8f3 100%);
-            padding: 3rem 0;
+            padding: 2rem 0;
             text-align: center;
             border-bottom: 1px solid #d4af37;
-            position: sticky;
-            top: 0;
-            z-index: 100;
             box-shadow: 0 2px 15px rgba(212, 175, 55, 0.1);
         }
 
         .logo {
             font-family: "Great Vibes", cursive;
-            font-size: 72px;
+            font-size: 56px;
             letter-spacing: 0.5px;
             background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             text-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
         }
 
         .tagline {
             color: #8b7355;
             font-style: italic;
-            font-size: 1rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             font-weight: 300;
-            margin-top: 0.5rem;
+            margin-top: 0.3rem;
         }
 
         nav {
@@ -56,6 +53,10 @@
             padding: 1.2rem;
             text-align: center;
             border-bottom: 1px solid #e8e0d5;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         nav a {
@@ -154,6 +155,7 @@
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
             border: 1px solid #e8e0d5;
+            cursor: pointer;
         }
 
         .gallery-item:hover {
@@ -187,6 +189,55 @@
             justify-content: center;
             color: #d4af37;
             font-size: 3rem;
+        }
+
+        /* Sub-Gallery Styles */
+        .sub-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .sub-gallery-item {
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e8e0d5;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .sub-gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+        }
+
+        .sub-gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #d4af37 0%, #b8973d 100%);
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
         }
 
         .order-form {
@@ -305,13 +356,71 @@
         }
 
         .success-message {
-            background: #1a3d1a;
-            color: #90ee90;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
             display: none;
-            border: 1px solid #2d5a2d;
+        }
+
+        /* Modal Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 500px;
+            margin: 2rem;
+            border: 2px solid #d4af37;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .modal-content h3 {
+            background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .modal-content p {
+            color: #5a5a5a;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .modal-close-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #b8973d 100%);
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .modal-close-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
         }
 
         footer {
@@ -334,7 +443,15 @@
             }
 
             .logo {
-                font-size: 48px;
+                font-size: 42px;
+            }
+
+            .tagline {
+                font-size: 0.8rem;
+            }
+
+            header {
+                padding: 1.5rem 0;
             }
 
             nav a {
@@ -384,18 +501,75 @@
         <div id="gallery" class="section">
             <h2 style="background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 2rem; font-size: 2.5rem; font-weight: 300; letter-spacing: 2px;">Our Portfolio</h2>
             <div class="gallery">
-                <div class="gallery-item">
+                <div class="gallery-item" onclick="showSubGallery('birthday')">
                     <div class="placeholder-img">🎂</div>
                     <div class="gallery-caption">Birthday Cakes</div>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" onclick="showSubGallery('cupcakes')">
                     <div class="placeholder-img">🧁</div>
                     <div class="gallery-caption">Cupcakes</div>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" onclick="showSubGallery('luxury')">
                     <div class="placeholder-img">🧁</div>
                     <div class="gallery-caption">Luxury Cupcakes</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Birthday Cakes Sub-Gallery -->
+        <div id="birthday-gallery" class="section">
+            <button class="back-button" onclick="showSection('gallery')">← Back to Portfolio</button>
+            <h2 style="background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 2rem; font-size: 2.5rem; font-weight: 300; letter-spacing: 2px;">Birthday Cakes</h2>
+            <div class="sub-gallery">
+                <!-- Example placeholders - replace with real images -->
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🎂</div>
+                </div>
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🎂</div>
+                </div>
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🎂</div>
+                </div>
+                <!-- Add more items here - up to 20 -->
+            </div>
+        </div>
+
+        <!-- Cupcakes Sub-Gallery -->
+        <div id="cupcakes-gallery" class="section">
+            <button class="back-button" onclick="showSection('gallery')">← Back to Portfolio</button>
+            <h2 style="background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 2rem; font-size: 2.5rem; font-weight: 300; letter-spacing: 2px;">Cupcakes</h2>
+            <div class="sub-gallery">
+                <!-- Example placeholders - replace with real images -->
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🧁</div>
+                </div>
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🧁</div>
+                </div>
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🧁</div>
+                </div>
+                <!-- Add more items here - up to 20 -->
+            </div>
+        </div>
+
+        <!-- Luxury Cupcakes Sub-Gallery -->
+        <div id="luxury-gallery" class="section">
+            <button class="back-button" onclick="showSection('gallery')">← Back to Portfolio</button>
+            <h2 style="background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin-bottom: 2rem; font-size: 2.5rem; font-weight: 300; letter-spacing: 2px;">Luxury Cupcakes</h2>
+            <div class="sub-gallery">
+                <!-- Example placeholders - replace with real images -->
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🧁</div>
+                </div>
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🧁</div>
+                </div>
+                <div class="sub-gallery-item">
+                    <div class="placeholder-img" style="height: 250px;">🧁</div>
+                </div>
+                <!-- Add more items here - up to 20 -->
             </div>
         </div>
 
@@ -437,10 +611,16 @@
                 </div>
 
                 <button type="submit">Submit Commission Request</button>
-                <div class="success-message" id="successMsg">
-                    Thank you! Your commission request has been received. We will contact you shortly to discuss your bespoke creation.
-                </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h3>Thank You!</h3>
+            <p>Your commission request has been received. We will contact you within 24-48 hours to discuss your bespoke creation.</p>
+            <button class="modal-close-btn" onclick="closeModal()">Close</button>
         </div>
     </div>
 
@@ -454,6 +634,18 @@
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
+            window.scrollTo(0, 0); // Scroll to top when changing sections
+        }
+
+        function showSubGallery(category) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(category + '-gallery').classList.add('active');
+            window.scrollTo(0, 0); // Scroll to top
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
         }
 
         // Handle form submission
@@ -475,7 +667,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    document.getElementById('successMsg').style.display = 'block';
+                    document.getElementById('successModal').classList.add('active');
                     document.getElementById('orderForm').reset();
                 } else {
                     alert('There was an error submitting your order. Please try again or email us directly.');
