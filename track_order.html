@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - SoBespoke Cakes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f1e8;
+            color: #2a2a2a;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ffffff 0%, #faf8f3 100%);
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 1px solid #d4af37;
+            box-shadow: 0 2px 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .logo {
+            font-family: "Great Vibes", cursive;
+            font-size: 56px;
+            letter-spacing: 0.5px;
+            background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+        }
+
+        .tagline {
+            color: #8b7355;
+            font-style: italic;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .track-card {
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 8px;
+            border: 1px solid #e8e0d5;
+            box-shadow: 0 5px 30px rgba(212, 175, 55, 0.1);
+        }
+
+        h1 {
+            background: linear-gradient(180deg, #d4af37 0%, #d4af37 50%, #8b7355 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: #8b7355;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.9rem;
+            background: #faf8f3;
+            border: 1px solid #e8e0d5;
+            border-radius: 4px;
+            color: #2a2a2a;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, #d4af37 0%, #b8973d 100%);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .order-result {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #faf8f3;
+            border-radius: 8px;
+            border: 1px solid #e8e0d5;
+        }
+
+        .order-result.show {
+            display: block;
+        }
+
+        .order-id {
+            font-size: 1.5rem;
+            color: #d4af37;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: monospace;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-new {
+            background: #fff4e6;
+            color: #d4af37;
+            border: 1px solid #d4af37;
+        }
+
+        .status-accepted {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+
+        .status-rejected {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+
+        .status-completed {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #2196f3;
+        }
+
+        .order-details {
+            margin-top: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e8e0d5;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #8b7355;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: #2a2a2a;
+            flex: 1;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #f44336;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-link a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #b8973d;
+        }
+
+        footer {
+            background: #ffffff;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #d4af37;
+            color: #5a5a5a;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 42px;
+            }
+
+            .track-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .detail-row {
+                flex-direction: column;
+            }
+
+            .detail-label {
+                margin-bottom: 0.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="logo">SoBespoke Cakes</h1>
+        <p class="tagline">Track Your Order</p>
+    </header>
+
+    <div class="container">
+        <div class="track-card">
+            <h1>Track Your Order</h1>
+            <p style="text-align: center; color: #5a5a5a; margin-bottom: 2rem;">
+                Enter your Order ID and email address to check your order status
+            </p>
+
+            <form id="trackForm">
+                <div class="form-group">
+                    <label for="orderId">Order ID</label>
+                    <input type="text" id="orderId" placeholder="e.g., SBC-202503-001">
+                </div>
+
+                <p style="text-align: center; color: #8b7355; margin: 1rem 0;">AND</p>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com">
+                </div>
+
+                <button type="submit" id="trackBtn">Track Order</button>
+
+                <div class="error-message" id="errorMsg"></div>
+            </form>
+
+            <div class="order-result" id="orderResult">
+                <div class="order-id" id="displayOrderId"></div>
+                <div id="statusBadge"></div>
+                
+                <div class="order-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Customer Name:</span>
+                        <span class="detail-value" id="displayName"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value" id="displayEmail"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Cake Type:</span>
+                        <span class="detail-value" id="displayType"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Design:</span>
+                        <span class="detail-value" id="displayDesign"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Due Date:</span>
+                        <span class="detail-value" id="displayDueDate"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Order Placed:</span>
+                        <span class="detail-value" id="displayTimestamp"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SoBespoke Cakes. All rights reserved.</p>
+        <p style="margin-top: 0.5rem;">Contact: 146lmanning@gmail.com</p>
+    </footer>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTI0biWj8C3Iye4MeoZsx0TPrHbwpGCl0qM4XJcQFvWMDTC7yK3wekQOBC80acuext/exec';
+
+        document.getElementById('trackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const orderId = document.getElementById('orderId').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!orderId || !email) {
+                showError('Please enter Order ID and email address');
+                return;
+            }
+            
+            const trackBtn = document.getElementById('trackBtn');
+            trackBtn.disabled = true;
+            trackBtn.textContent = 'Searching...';
+            
+            hideError();
+            hideOrderResult();
+            
+            // Build query URL
+            let url = SCRIPT_URL + '?action=getOrder';
+            if (orderId) url += '&orderId=' + encodeURIComponent(orderId);
+            if (email) url += '&email=' + encodeURIComponent(email);
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    trackBtn.disabled = false;
+                    trackBtn.textContent = 'Track Order';
+                    
+                    if (data.status === 'success' && data.order) {
+                        displayOrder(data.order);
+                    } else {
+                        showError('Order not found. Please check your Order ID or email address.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    trackBtn.disabled = false;
+                    trackBtn.textContent = 'Track Order';
+                    showError('Unable to track order. Please try again later.');
+                });
+        });
+
+        function displayOrder(order) {
+            document.getElementById('displayOrderId').textContent = order.orderId;
+            document.getElementById('displayName').textContent = order.name;
+            document.getElementById('displayEmail').textContent = order.email;
+            document.getElementById('displayType').textContent = order.type;
+            document.getElementById('displayDesign').textContent = order.design;
+            document.getElementById('displayDueDate').textContent = formatDate(order.dueDate);
+            document.getElementById('displayTimestamp').textContent = formatDateTime(order.timestamp);
+            
+            // Set status badge
+            const statusBadge = document.getElementById('statusBadge');
+            const status = order.orderStatus;
+            let badgeClass = 'status-new';
+            let statusText = status;
+            
+            if (status === 'Accepted') {
+                badgeClass = 'status-accepted';
+                statusText = '✓ Accepted';
+            } else if (status === 'Rejected') {
+                badgeClass = 'status-rejected';
+                statusText = '✗ Rejected';
+            } else if (status === 'Completed') {
+                badgeClass = 'status-completed';
+                statusText = '✓ Completed';
+            } else if (status === 'New Order') {
+                statusText = '● Pending Review';
+            }
+            
+            statusBadge.innerHTML = '<span class="status-badge ' + badgeClass + '">' + statusText + '</span>';
+            
+            document.getElementById('orderResult').classList.add('show');
+        }
+
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.textContent = message;
+            errorMsg.classList.add('show');
+        }
+
+        function hideError() {
+            document.getElementById('errorMsg').classList.remove('show');
+        }
+
+        function hideOrderResult() {
+            document.getElementById('orderResult').classList.remove('show');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+    </script>
+</body>
+</html>
