@@ -427,6 +427,10 @@
                         <option value="Completed">Completed</option>
                     </select>
                 </div>
+                <div>
+                    <label>Order ID</label>
+                    <input type ="string" id="orderid">
+                </div>
                 <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
             </div>
 
@@ -557,6 +561,7 @@
             const dateFrom = document.getElementById('dateFrom').value;
             const dateTo = document.getElementById('dateTo').value;
             const status = document.getElementById('statusFilter').value;
+            const orderId = document.getElementById('orderid').value.trim();
 
             filteredOrders = allOrders.filter(order => {
                 const orderDate = new Date(order.timestamp);
@@ -564,13 +569,12 @@
                 if (dateFrom && orderDate < new Date(dateFrom)) return false;
                 if (dateTo && orderDate > new Date(dateTo + 'T23:59:59')) return false;
                 if (status && order.status !== status) return false;
-                
+                 if (orderId && !order.orderId.toLowerCase().includes(orderId.toLowerCase())) return false;
                 return true;
             });
 
             renderOrders();
         }
-
         // View Order Detail
         function viewOrder(order) {
             document.getElementById('modalOrderId').textContent = order.orderId;
