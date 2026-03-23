@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SoBespoke Cakes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f1e8;
+            color: #2a2a2a;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Login Screen */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 8px;
+            border: 1px solid #e8e0d5;
+            box-shadow: 0 5px 30px rgba(212, 175, 55, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-card h2 {
+            color: #d4af37;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 0.9rem;
+            margin-bottom: 1rem;
+            background: #faf8f3;
+            border: 1px solid #e8e0d5;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #d4af37 0%, #b8973d 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-card button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #d4af37;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #d4af37;
+            font-size: 1.8rem;
+        }
+
+        .logout-btn {
+            background: #ffffff;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 0.6rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #d4af37;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e8e0d5;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4af37;
+        }
+
+        .stat-label {
+            color: #8b7355;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Filters */
+        .filters {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e8e0d5;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #8b7355;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 0.7rem;
+            background: #faf8f3;
+            border: 1px solid #e8e0d5;
+            border-radius: 4px;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: #d4af37;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Orders Table */
+        .orders-table {
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e8e0d5;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #faf8f3;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #8b7355;
+            border-bottom: 2px solid #e8e0d5;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f5f1e8;
+        }
+
+        tr:hover {
+            background: #faf8f3;
+        }
+
+        .order-id {
+            font-family: monospace;
+            color: #d4af37;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background: #fff4e6;
+            color: #d4af37;
+        }
+
+        .badge-accepted {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-rejected {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .badge-completed {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-view {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .btn-sheet {
+            background: #fff4e6;
+            color: #d4af37;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 3rem;
+            color: #8b7355;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e8e0d5;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8b7355;
+        }
+
+        .detail-row {
+            display: flex;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f5f1e8;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #8b7355;
+            min-width: 140px;
+        }
+
+        .detail-value {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .orders-table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.7rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-card">
+            <h2>Admin Login</h2>
+            <input type="password" id="passwordInput" placeholder="Enter admin password" />
+            <button onclick="login()">Login</button>
+            <p style="margin-top: 1rem; color: #c62828; font-size: 0.85rem; display: none;" id="loginError">Incorrect password</p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header>
+            <h1>SoBespoke Cakes - Admin Dashboard</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </header>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalOrders">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pendingOrders">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="acceptedOrders">0</div>
+                    <div class="stat-label">Accepted</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="rejectedOrders">0</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Date From</label>
+                    <input type="date" id="dateFrom">
+                </div>
+                <div class="filter-group">
+                    <label>Date To</label>
+                    <input type="date" id="dateTo">
+                </div>
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select id="statusFilter">
+                        <option value="">All</option>
+                        <option value="New Order">Pending</option>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="orders-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Cake Type</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="7" class="no-orders">Loading orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalOrderId" style="color: #d4af37;"></h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalOrderDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTI0biWj8C3Iye4MeoZsx0TPrHbwpGCl0qM4XJcQFvWMDTC7yK3wekQOBC80acuext/exec';
+        const ADMIN_PASSWORD = 'SoBespoke2024!'; // Change this to your desired password
+        
+        let allOrders = [];
+        let filteredOrders = [];
+
+        // Login
+        function login() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                loadOrders();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('passwordInput').value = '';
+        }
+
+        // Load Orders
+        function loadOrders() {
+            fetch(SCRIPT_URL + '?action=getAllOrders')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        allOrders = data.orders.reverse(); // Most recent first
+                        filteredOrders = [...allOrders];
+                        updateStats();
+                        renderOrders();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('ordersTableBody').innerHTML = 
+                        '<tr><td colspan="7" class="no-orders">Failed to load orders</td></tr>';
+                });
+        }
+
+        // Update Stats
+        function updateStats() {
+            const total = allOrders.length;
+            const pending = allOrders.filter(o => o.status === 'New Order').length;
+            const accepted = allOrders.filter(o => o.status === 'Accepted').length;
+            const rejected = allOrders.filter(o => o.status === 'Rejected').length;
+
+            document.getElementById('totalOrders').textContent = total;
+            document.getElementById('pendingOrders').textContent = pending;
+            document.getElementById('acceptedOrders').textContent = accepted;
+            document.getElementById('rejectedOrders').textContent = rejected;
+        }
+
+        // Render Orders
+        function renderOrders() {
+            const tbody = document.getElementById('ordersTableBody');
+            
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="no-orders">No orders found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filteredOrders.map(order => {
+                const statusClass = getStatusClass(order.status);
+                const statusLabel = getStatusLabel(order.status);
+                
+                return `
+                    <tr>
+                        <td><span class="order-id">${order.orderId}</span></td>
+                        <td>${formatDate(order.timestamp)}</td>
+                        <td>${order.name}</td>
+                        <td>${order.type}</td>
+                        <td>${formatDate(order.dueDate)}</td>
+                        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                        <td class="actions">
+                            <button class="action-btn btn-view" onclick='viewOrder(${JSON.stringify(order)})'>View</button>
+                            <button class="action-btn btn-sheet" onclick="openSheet()">Sheet</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Apply Filters
+        function applyFilters() {
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            const status = document.getElementById('statusFilter').value;
+
+            filteredOrders = allOrders.filter(order => {
+                const orderDate = new Date(order.timestamp);
+                
+                if (dateFrom && orderDate < new Date(dateFrom)) return false;
+                if (dateTo && orderDate > new Date(dateTo + 'T23:59:59')) return false;
+                if (status && order.status !== status) return false;
+                
+                return true;
+            });
+
+            renderOrders();
+        }
+
+        // View Order Detail
+        function viewOrder(order) {
+            document.getElementById('modalOrderId').textContent = order.orderId;
+            document.getElementById('modalOrderDetails').innerHTML = `
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value"><span class="status-badge ${getStatusClass(order.status)}">${getStatusLabel(order.status)}</span></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Order Date:</span>
+                    <span class="detail-value">${formatDateTime(order.timestamp)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Customer Name:</span>
+                    <span class="detail-value">${order.name}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">${order.email}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Cake Type:</span>
+                    <span class="detail-value">${order.type}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Design:</span>
+                    <span class="detail-value">${order.design}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Due Date:</span>
+                    <span class="detail-value">${formatDate(order.dueDate)}</span>
+                </div>
+                ${order.rejectionReason ? `
+                <div class="detail-row">
+                    <span class="detail-label">Rejection Reason:</span>
+                    <span class="detail-value">${order.rejectionReason}</span>
+                </div>
+                ` : ''}
+            `;
+            document.getElementById('orderModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
+        function openSheet() {
+            window.open('https://docs.google.com/spreadsheets/d/1zGiux58YM87LSDf2zOZEsbxMR3kHhVwz1XmDagLST-A', '_blank');
+        }
+
+        // Helper Functions
+        function getStatusClass(status) {
+            if (status === 'Accepted') return 'badge-accepted';
+            if (status === 'Rejected') return 'badge-rejected';
+            if (status === 'Completed') return 'badge-completed';
+            return 'badge-new';
+        }
+
+        function getStatusLabel(status) {
+            if (status === 'New Order') return 'Pending';
+            return status;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Enter key for login
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>
