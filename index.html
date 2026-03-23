@@ -471,6 +471,7 @@
         <a href="#" onclick="showSection('home')">Home</a>
         <a href="#" onclick="showSection('gallery')">Gallery</a>
         <a href="#" onclick="showSection('order')">Order</a>
+        <a href="track-order.html">Track Order</a>
     </nav>
 
     <div class="container">
@@ -619,7 +620,12 @@
     <div class="modal" id="successModal">
         <div class="modal-content">
             <h3>Thank You!</h3>
-            <p>Your commission request has been received. We will contact you within 24-48 hours to discuss your bespoke creation.</p>
+            <p>Your commission request has been received.</p>
+            <p style="font-size: 1.2rem; color: #d4af37; font-weight: 500; margin: 1rem 0;">
+                Your Order ID: <span id="orderIdDisplay" style="font-family: monospace;">---</span>
+            </p>
+            <p style="font-size: 0.9rem; color: #8b7355;">Please save this Order ID to track your order.</p>
+            <p>We will contact you within 24-48 hours to discuss your bespoke creation.</p>
             <button class="modal-close-btn" onclick="closeModal()">Close</button>
         </div>
     </div>
@@ -667,6 +673,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
+                    document.getElementById('orderIdDisplay').textContent = data.orderId;
                     document.getElementById('successModal').classList.add('active');
                     document.getElementById('orderForm').reset();
                 } else {
